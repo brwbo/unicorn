@@ -56,7 +56,8 @@ describe("what Unicorn offers to set up", () => {
   it("in Simple mode, chips for only what its look around found missing, in order: AI, apps, skills, phone, Cloud", () => {
     expect(introChips(fresh)).toEqual(["ai", "apps", "phone", "cloud"]);
     expect(introChips({ ...fresh, aiReady: true, importFound: true })).toEqual(["apps", "import", "phone", "cloud"]);
-    expect(introChips({ ...fresh, aiReady: true, founder: true })).toEqual(["launch", "apps", "phone", "cloud"]);
+    expect(introChips({ ...fresh, aiReady: true, founder: true })).toEqual(["launch"]);
+    expect(introChips({ ...fresh, founder: true })).toEqual(["launch", "ai"]);
     expect(introChips({ ...fresh, aiReady: true, appsConnected: true, phonePaired: true })).toEqual(["cloud"]);
     expect(introChips({ ...fresh, aiReady: true, remote: true })).toEqual(["apps", "phone"]);
     expect(introChips({ ...fresh, aiReady: true, onCloud: true, importFound: false })).toEqual(["apps", "phone"]);

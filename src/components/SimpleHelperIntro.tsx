@@ -34,7 +34,8 @@ export function introLines(input: { name: string; chief: boolean; person?: strin
   const lead = input.chief && input.stage ? t(FOUNDER_LEAD_KEYS[input.stage]) : input.chief ? t("helperIntro.lead.chiefOfStaff") : input.team ? t("helperIntro.lead.member") : t("helperIntro.lead.helper");
   const hello = input.chief ? t("helperIntro.hello", { name: input.name })
     : input.person ? t("helperIntro.hi.helperNamed", { name: input.name, person: input.person }) : t("helperIntro.hi.helper", { name: input.name });
-  return [hello, [lead, team].filter(Boolean).join(" "), t("helperIntro.lookingAround")];
+  const founder = input.chief && Boolean(input.stage);
+  return [hello, [lead, team].filter(Boolean).join(" "), ...(founder ? [] : [t("helperIntro.lookingAround")])];
 }
 
 /** The follow-up in the viewer's language. */
@@ -158,7 +159,8 @@ export function SimpleHelperIntro({ botId, threadId, message, answered, followup
   const { shown, staged } = useArrival(first || due, ai !== "none", facts !== null);
   if (hidden) return null;
 
-  const bubbles = [...lines.slice(0, Math.min(shown, 3)), ...(shown >= 5 && facts ? [followupLine(facts)] : [])];
+  const founder = Boolean(bot?.chiefOfStaff && state.config?.profile?.founderStage);
+  const bubbles = [...lines.slice(0, Math.min(shown, 3)), ...(shown >= 5 && facts && !founder ? [followupLine(facts)] : [])];
   const chips = answered || shown < ALL || !facts ? [] : introChips({
     aiReady: ai === "own",
     ownBots: state.bots.filter((candidate) => !candidate.hidden && !candidate.defaultBot).length,
@@ -168,9 +170,9 @@ export function SimpleHelperIntro({ botId, threadId, message, answered, followup
     appsConnected: Boolean(look.apps?.length),
     phonePaired: look.phonePaired,
     importFound: look.importFound,
-    founder: Boolean(bot?.chiefOfStaff && state.config?.profile?.founderStage),
+    founder,
   });
-  const typing = staged && ai !== "none" && shown === 4 && Boolean(bot);
+  const typing = staged && ai !== "none" && shown === 4 && Boolean(bot) && !founder;
   return (
     <div data-helper-intro={message.id} className="flex w-full flex-col items-start gap-1">
       {bubbles.map((text, index) => (

@@ -125,9 +125,9 @@ export const INTRO_CHIPS = 3;
  * with bots of the person's own only an AI. Adding a bot lives on the sidebar's +. */
 export function introChips(input: IntroFacts): IntroChip[] {
   if (input.team) return [];
+  if (input.founder) return ["launch", ...(input.aiReady ? [] : ["ai" as const])];
   const fresh = input.ownBots === 0;
   return [
-    ...(input.founder ? ["launch" as const] : []),
     ...(input.aiReady ? [] : ["ai" as const]),
     ...(fresh && !input.appsConnected ? ["apps" as const] : []),
     ...(fresh && input.importFound ? ["import" as const] : []),

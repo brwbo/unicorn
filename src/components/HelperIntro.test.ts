@@ -117,7 +117,8 @@ describe("what Unicorn says first", () => {
     const plain = introLines({ name: "Unicorn", chief: true });
     const seed = introLines({ name: "Unicorn", chief: true, stage: "seed" });
     expect(seed[0]).toBe(plain[0]);
-    expect(seed[2]).toBe(plain[2]);
+    expect(plain).toHaveLength(3);
+    expect(seed).toHaveLength(2);
     expect(seed[1]).toContain("seed round");
     expect(seed[1]).toContain("Launch Brief");
     expect(introLines({ name: "Unicorn", chief: false, stage: "seed" })).toEqual(introLines({ name: "Unicorn", chief: false }));
