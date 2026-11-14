@@ -23,7 +23,7 @@ const answer = (body: unknown, init: ResponseInit = { status: 200 }) => new Resp
 function subject(options: { fetch?: typeof fetch; dir?: string; env?: NodeJS.ProcessEnv; bundled?: AnnouncementFeed } = {}) {
   let time = NOW;
   const log = vi.fn();
-  const store = new AnnouncementStore({ dataDir: options.dir ?? dataDir(), bundled: options.bundled ?? bundled, now: () => time, log, env: options.env ?? {}, fetch: options.fetch });
+  const store = new AnnouncementStore({ dataDir: options.dir ?? dataDir(), bundled: options.bundled ?? bundled, now: () => time, log, env: options.env ?? { [ANNOUNCEMENTS_DISABLE_ENV]: "0" }, fetch: options.fetch });
   return { store, log, advance: (ms: number) => { time += ms; } };
 }
 
