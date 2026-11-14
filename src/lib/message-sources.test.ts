@@ -12,6 +12,11 @@ describe("extractSources", () => {
     expect(out[0]!.retrieved).toBe("2026-11-14");
   });
 
+  it("names a link labelled only \"source\" by its site", () => {
+    const out = extractSources("Socket ships PR scanning ([source](https://socket.dev/blog/a)) and [Source](https://www.tech.eu/b).");
+    expect(out.map((s) => s.title)).toEqual(["socket.dev", "tech.eu"]);
+  });
+
   it("carries a section date down to links on later lines", () => {
     const text = "*Sourced via cala, retrieved 2026-11-14.*\n- [One](https://one.example.com/a)\n- [Two](https://two.example.com/b)";
     expect(extractSources(text).map((x) => x.retrieved)).toEqual(["2026-11-14", "2026-11-14"]);

@@ -7,6 +7,8 @@ export interface MessageSource {
 
 const LINK = /\[([^\]\n]{1,200})\]\((https?:\/\/[^\s)]+)\)/g;
 const DATE = /(\d{4}-\d{2}-\d{2})/;
+/** A link labelled only "source" says nothing in the list, so its site name stands in. */
+const GENERIC_TITLE = /^(source|sources|link|here|ref|reference)$/i;
 
 export function extractSources(text: string): MessageSource[] {
   const seen = new Map<string, MessageSource>();
@@ -31,7 +33,7 @@ export function extractSources(text: string): MessageSource[] {
         if (!prior.retrieved && date) prior.retrieved = date;
         continue;
       }
-      seen.set(key, { url: key, title: title === m[2] ? host : title, host, retrieved: date });
+      seen.set(key, { url: key, title: title === m[2] || GENERIC_TITLE.test(title) ? host : title, host, retrieved: date });
     }
   }
   return [...seen.values()];
