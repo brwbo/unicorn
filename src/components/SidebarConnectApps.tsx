@@ -15,8 +15,6 @@ export type AppFace = Pick<ToolkitCard, "slug" | "label" | "logo" | "domain">;
 
 export const POPULAR_APPS: readonly AppFace[] = [
   { slug: "gmail", label: "Gmail", logo: null, domain: "gmail.com" },
-  { slug: "slack", label: "Slack", logo: null, domain: "slack.com" },
-  { slug: "notion", label: "Notion", logo: null, domain: "notion.so" },
 ];
 
 export const APP_FACES = 3;
