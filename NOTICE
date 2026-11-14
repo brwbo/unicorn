@@ -1,0 +1,16 @@
+Unicorn
+Copyright 2026 Ben Rowbotham
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Unicorn is a modified version of an existing open-source project that was
+released under the Apache License, Version 2.0. The changes made for Unicorn
+include the founder onboarding and playbooks, the Cala research connection
+and the sources panel. Notices from the original project that apply to code
+kept unchanged remain with that code.
+
+Third-party components bundled in third_party/ keep their own licenses,
+which sit beside them in that folder.
+
+The name Cala belongs to its owner. This project uses Cala's public API and
+is not endorsed by Cala.
