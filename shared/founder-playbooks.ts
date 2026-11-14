@@ -11,6 +11,8 @@ const CALA_METHOD = "Method: start with knowledge_search for the open question; 
 
 const CALA_SOURCES = "Source links: a knowledge_search result lists its pages under context, each with origins[].source.url (the page) and origins[].document.name (its title), and each line of explainability names the context ids behind it; an entity_retrieval result gives sources[].document (the page) and sources[].date under each property. knowledge_query rows carry no links at all, so source every row you keep with a knowledge_search or entity_retrieval call about that company. Write each source as a markdown link, [page title](https://full-url), on the line or table row it supports, copying the URL exactly as cala returned it; \"source: cala\" with no link does not count. A long result may be saved to a file: read the file and take the URLs from it. If no call returned a link for a fact, write \"no source link\" beside it and list it under gaps.";
 
+const CALA_BUDGET = "Cala results are long, because each one carries the full text of every page behind it, and too many at once push your earlier findings out of memory. So: run cala calls one at a time, never several in parallel; ask one question that covers several companies instead of one question per company; right after each call, append the facts you will keep and their links to a notes file named cala-notes.md in your working folder, and build the deliverable from that file; never ask cala the same question twice. One task gets at most eight cala calls in all: when they are spent, deliver what you have and list what is missing under gaps.";
+
 export interface FounderSpecialist {
   name: string;
   title: string;
@@ -35,7 +37,7 @@ const COMMON_RULES = [
 ];
 
 const SPECIALIST_RULES =
-  "Facts about companies, investors, customers, laws or funding rounds come from the cala tools only, never web search, each with its source link and retrieved date; if cala has nothing, say so and never invent. " + CALA_SOURCES + " Nothing irreversible (sending, incorporating, deploying, spending) happens without the person's approval. Legal output ends with \"a lawyer should confirm\". Report back to the Chief of Staff with a short summary and the finished deliverable.";
+  "Facts about companies, investors, customers, laws or funding rounds come from the cala tools only, never web search, each with its source link and retrieved date; if cala has nothing, say so and never invent. " + CALA_SOURCES + " " + CALA_BUDGET + " Nothing irreversible (sending, incorporating, deploying, spending) happens without the person's approval. Legal output ends with \"a lawyer should confirm\". Report back to the Chief of Staff with a short summary and the finished deliverable.";
 
 const LAUNCH_BRIEF_NOTE =
   "The Launch Brief is one chat message: the person and their problem, the narrowest first version, the evidence of demand and its gaps, a competitor and funding table, who is active in the sector, the rules that apply in their country, the risks, and the next three steps. Each factual line has its source link and retrieved date, and the competitor table has a Source column holding the link for that row.";
@@ -49,7 +51,7 @@ const IDEA: FounderPlaybook = {
   steps: [
     "Forcing questions, one at a time, in this order: who exactly has this problem; what do they do about it today; what evidence of demand exists; who the person has already talked to; the narrowest first version; what could kill it. Restate each answer in one line before moving on.",
     "Country: ask which country they will operate from, because the rules and registries depend on it.",
-    "Cala evidence pass: competitors with their funding and lead investors; which investors are active in this sector; the relevant regulation and company registries for the person's country. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES,
+    "Cala evidence pass: competitors with their funding and lead investors; which investors are active in this sector; the relevant regulation and company registries for the person's country. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES + " " + CALA_BUDGET,
     `Write the Launch Brief. ${LAUNCH_BRIEF_NOTE}`,
     `${TEAM_APPROVAL} Choose only the specialists the brief shows are needed, from the library below.`,
     "Once applied, hand each new specialist its first task with coordinate_bots (at most four bots per call) using the task and done_when from the library, and attach the Launch Brief text. Say that work is assigned, not finished.",
@@ -68,7 +70,7 @@ const SEED: FounderPlaybook = {
   label: "raising a seed round",
   steps: [
     "Collect, one question at a time: sector; geography; target raise; traction so far; existing investors (if any).",
-    "Cala evidence pass: comparable seed rounds with their lead investors and co-investors; which co-investors overlap across those rounds; which investors have been active in this sector recently. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES,
+    "Cala evidence pass: comparable seed rounds with their lead investors and co-investors; which co-investors overlap across those rounds; which investors have been active in this sector recently. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES + " " + CALA_BUDGET,
     `Write the Launch Brief for a raise. ${LAUNCH_BRIEF_NOTE} Add the comparable rounds table and the investors the evidence points to.`,
     `${TEAM_APPROVAL} Choose the specialists from the library below that this raise needs.`,
     "Once applied, hand each specialist its first task with coordinate_bots (at most four bots per call, so use two calls for more) using the task and done_when from the library, with the Launch Brief text attached. Say that work is assigned, not finished.",
@@ -88,7 +90,7 @@ const BUILDING: FounderPlaybook = {
   label: "building a first version",
   steps: [
     "Ask, one at a time: who it is for; what the first version must do; what exists already; what is blocking them right now.",
-    "Cala evidence pass: the closest competitors with funding, and regulation that affects the first version in the person's country. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES,
+    "Cala evidence pass: the closest competitors with funding, and regulation that affects the first version in the person's country. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES + " " + CALA_BUDGET,
     `Write a short Launch Brief. ${LAUNCH_BRIEF_NOTE}`,
     `${TEAM_APPROVAL} Choose two or three specialists from the library below.`,
     "Once applied, hand each its first task with coordinate_bots using the task and done_when from the library.",
@@ -105,7 +107,7 @@ const SCALING: FounderPlaybook = {
   label: "growing with customers",
   steps: [
     "Ask, one at a time: what the business sells and to whom; where growth comes from today; what is holding growth back; the one number the person watches.",
-    "Cala evidence pass: competitors and their recent funding, who is active in the sector, and the rules that will matter as the business grows. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES,
+    "Cala evidence pass: competitors and their recent funding, who is active in the sector, and the rules that will matter as the business grows. Tell the person you are researching before you start. " + CALA_METHOD + " " + CALA_SOURCES + " " + CALA_BUDGET,
     `Write a short Launch Brief. ${LAUNCH_BRIEF_NOTE}`,
     `${TEAM_APPROVAL} Choose two or three specialists from the library below.`,
     "Once applied, hand each its first task with coordinate_bots using the task and done_when from the library.",

@@ -63,6 +63,13 @@ describe("every founder playbook", () => {
     for (const one of founderPlaybook(stage).specialists) expect(founderSpecialistSoul(one)).toContain("[page title](https://full-url)");
   });
 
+  it.each(FOUNDER_STAGES)("%s caps Cala calls and keeps findings in a notes file, so long results cannot loop a bot", (stage) => {
+    const texts = [founderPlaybookPrompt(stage, true), ...founderPlaybook(stage).specialists.map(founderSpecialistSoul)];
+    for (const text of texts) {
+      for (const part of ["one at a time, never several in parallel", "cala-notes.md", "never ask cala the same question twice", "at most eight cala calls"]) expect(text).toContain(part);
+    }
+  });
+
   it.each(FOUNDER_STAGES)("%s asks the person to approve the team in chat before propose_team_setup", (stage) => {
     const text = founderPlaybookPrompt(stage, true);
     expect(text).toContain("Shall I create this team?");
