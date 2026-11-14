@@ -48,6 +48,8 @@ describe("with Simple the only mode", () => {
     vi.resetModules();
     expect((await vi.importActual<typeof import("./simple-only")>("./simple-only")).SIMPLE_ONLY).toBe(false);
     const { readAdvancedMode, setAdvancedMode } = await import("./interface-mode");
+    expect(readAdvancedMode()).toBe(true);
+    setAdvancedMode(false);
     expect(readAdvancedMode()).toBe(false);
     setAdvancedMode(true);
     expect(readAdvancedMode()).toBe(true);
@@ -58,13 +60,13 @@ describe("with Simple the only mode", () => {
 });
 
 describe("with the switch back", () => {
-  it("defaults a fresh install to Simple and stores that once", async () => {
+  it("defaults a fresh install to the full view and stores that once", async () => {
     const { readAdvancedMode, settleAdvancedModeDefault, ADVANCED_MODE_KEY } = await fresh();
-    expect(readAdvancedMode()).toBe(false);
+    expect(readAdvancedMode()).toBe(true);
     settleAdvancedModeDefault();
     local.setItem("omb-skin", "midnight");
-    expect(local.getItem(ADVANCED_MODE_KEY)).toBe("0");
-    expect((await fresh()).readAdvancedMode()).toBe(false);
+    expect(local.getItem(ADVANCED_MODE_KEY)).toBe("1");
+    expect((await fresh()).readAdvancedMode()).toBe(true);
   });
 
   it("defaults an existing install to Advanced so an update hides nothing", async () => {

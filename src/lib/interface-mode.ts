@@ -1,6 +1,5 @@
 import { useSyncExternalStore } from "react";
 
-import { hasPriorRun } from "./prior-run";
 import { SIMPLE_ONLY } from "./simple-only";
 import { windowPrefChanged } from "./window-pref-changes";
 
@@ -25,7 +24,7 @@ export function readAdvancedMode(): boolean {
     const stored = store?.getItem(ADVANCED_MODE_KEY);
     if (stored === "1") return true;
     if (stored === "0") return false;
-    return hasPriorRun(store);
+    return true;
   } catch {
     return false;
   }

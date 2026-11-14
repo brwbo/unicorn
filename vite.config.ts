@@ -54,6 +54,8 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    // The notices the app keeps off in this build (src/components/AppNotices.tsx) stay on here, so their tests still run.
+    env: { VITE_PROMO_NOTICES: "1" },
     include,
     // OMB_VITEST_E2E=host (CI's Windows and macOS shards) leaves the e2e files that run on Linux only.
     exclude: [...configDefaults.exclude, ...(hostE2eOnly() ? portableE2eFiles(root, include) : [])],

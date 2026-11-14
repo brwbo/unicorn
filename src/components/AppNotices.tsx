@@ -67,6 +67,9 @@ function ProductHuntCard({ onDone }: { onDone: (action: "upvote" | "not_now" | "
 
 const trialKey = (trial: { state: string; endsAt: number }) => `${trial.state}:${trial.endsAt}`;
 
+/** Off in this build: no Simple mode popup, no sponsor cards (ModelGo, boat) and no upstream star or Product Hunt asks. The full view is the default. */
+const PROMO_NOTICES_ON: boolean = import.meta.env.VITE_PROMO_NOTICES === "1";
+
 export function AppNotices({ quiet = false, viewer = null, now = Date.now }: { quiet?: boolean; viewer?: WelcomeViewer | null; now?: () => number }) {
   const { state, dispatch } = useStore();
   const remote = window.ogb?.remoteClient?.active === true;
@@ -155,10 +158,10 @@ export function AppNotices({ quiet = false, viewer = null, now = Date.now }: { q
   // Advanced gets the word that it is back there instead.
   const promptSeen = useSimpleModePromptSeen(), newLookDue = useNewLookDue(), backDue = useAdvancedBackDue(), advanced = useAdvancedMode();
   const advancedBack = backDue && advanced;
-  const simpleDue = SIMPLE_ONLY ? newLookDue : advancedBack || !promptSeen;
+  const simpleDue = PROMO_NOTICES_ON && (SIMPLE_ONLY ? newLookDue : advancedBack || !promptSeen);
   const simpleBlocked = useOtherDialogOpen(simpleDue) || Boolean(state.liveCall && state.liveCall.status !== "ended");
   // A sponsor's card is for whoever chooses a team's providers: its Owner and Admins, never its members.
-  const sponsorsHere = SPONSOR_CARDS_FOR_TEAM_MEMBERS || !state.config?.team || viewer?.canSave === true;
+  const sponsorsHere = PROMO_NOTICES_ON && (SPONSOR_CARDS_FOR_TEAM_MEMBERS || !state.config?.team || viewer?.canSave === true);
   const boatHere = sponsorsHere && boatOfferRuns(now()) && brandStatus().source !== "file";
   const modelgoHere = sponsorsHere && modelgoOfferable(state.config?.managedPolicy);
 
@@ -226,7 +229,7 @@ export function AppNotices({ quiet = false, viewer = null, now = Date.now }: { q
       : whatsNewDue === null || whatsNewState === "loading" || !viewer || afterWelcome === null || uniBotFirst || moving === null || whatsNewBlocked ? null : true,
     [UPDATES_CONSENT_NOTICE]: consentNow,
     [TWO_PLACES_NOTICE]: twoFact,
-    [PRODUCT_HUNT_NOTICE]: !cards || moving || firstChat === true || brandStatus().source === "file" || now() >= PRODUCT_HUNT_UNTIL ? false
+    [PRODUCT_HUNT_NOTICE]: !PROMO_NOTICES_ON || !cards || moving || firstChat === true || brandStatus().source === "file" || now() >= PRODUCT_HUNT_UNTIL ? false
       : organization === null || moving === null || firstChat === null ? null : !organization,
     [CLOUD_INTRO]: moving ? false : moving === null ? null : introDue(),
     [CLOUD_TRIAL_NOTICE]: planBridge && plan === null ? null : Boolean(key && (trialDue || trialOpen === key)),
@@ -236,7 +239,7 @@ export function AppNotices({ quiet = false, viewer = null, now = Date.now }: { q
     [BOAT_OFFER_NOTICE]: !boatHere || moving || afterWelcome === true || !usedBefore(state.bots) || desktopState?.seen.includes(BOAT_OFFER_NOTICE) ? false
       : organization === null || moving === null || afterWelcome === null || uniBotFirst || (desktop && !desktopState) ? null : !organization,
     [ANNOUNCEMENT_NOTICE]: announcementNow,
-    [STAR_NOTICE]: !bridge || moving || brandStatus().source === "file" || !usedBefore(state.bots) ? false : moving === null ? null : true,
+    [STAR_NOTICE]: !PROMO_NOTICES_ON || !bridge || moving || brandStatus().source === "file" || !usedBefore(state.bots) ? false : moving === null ? null : true,
   }, id => id === CLOUD_INTRO ? stage === "done" && !introOpen
     : id === STAR_NOTICE || id === PRODUCT_HUNT_NOTICE || id === BOAT_OFFER_NOTICE || id === MODELGO_OFFER_NOTICE ? noticeSeen(record, id) : false, launch, closed) : null;
 
