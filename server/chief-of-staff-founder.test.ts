@@ -55,6 +55,14 @@ describe("every founder playbook", () => {
     }
   });
 
+  it.each(FOUNDER_STAGES)("%s names Cala's real tools and where each result keeps its links", (stage) => {
+    const text = founderPlaybookPrompt(stage, true);
+    expect(text).toContain("entity_retrieval");
+    expect(text).not.toContain("retrieve_entity");
+    for (const part of ["origins[].source.url", "sources[].document", "knowledge_query rows carry no links", "[page title](https://full-url)", "Source column"]) expect(text).toContain(part);
+    for (const one of founderPlaybook(stage).specialists) expect(founderSpecialistSoul(one)).toContain("[page title](https://full-url)");
+  });
+
   it.each(FOUNDER_STAGES)("%s asks the person to approve the team in chat before propose_team_setup", (stage) => {
     const text = founderPlaybookPrompt(stage, true);
     expect(text).toContain("Shall I create this team?");

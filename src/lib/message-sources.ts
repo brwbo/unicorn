@@ -39,7 +39,7 @@ export function extractSources(text: string): MessageSource[] {
 
 export const MIN_SOURCES = 2;
 
-const CALA_TOOL = /(^|__)cala(__|$)|^(knowledge_search|knowledge_query|entity_search|entity_lookup|entity_introspection|retrieve_entity)$/i;
+const CALA_TOOL = /(^|__)cala(__|$)|^(knowledge_search|knowledge_query|entity_search|entity_lookup|entity_introspection|entity_retrieval)$/i;
 
 interface TurnRow {
   id: string;

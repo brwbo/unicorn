@@ -32,6 +32,12 @@ describe("calaReplyIds", () => {
     expect([...calaReplyIds([user, cala, reply("r1")])]).toEqual(["r1"]);
   });
 
+  it("counts Cala's own tool names when an engine reports them without the server prefix", () => {
+    const bare = { id: "t", role: "bot", kind: "activity", tool: { name: "entity_retrieval" } };
+    expect([...calaReplyIds([user, bare, reply("r1")])]).toEqual(["r1"]);
+    expect(calaReplyIds([user, { ...bare, tool: { name: "retrieve_entity" } }, reply("r1")]).size).toBe(0);
+  });
+
   it("does not carry across a new person message or other tools", () => {
     expect(calaReplyIds([user, other, reply("r1")]).size).toBe(0);
     expect([...calaReplyIds([user, cala, reply("r1"), { ...user, id: "u2" }, reply("r2")])]).toEqual(["r1"]);
